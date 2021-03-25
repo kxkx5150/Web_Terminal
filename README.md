@@ -1,12 +1,15 @@
 # Web_Terminal
- Web Terminal Electron App
+ Electron App  
+ 
+ cmd.exe, powershell.exe, bash.exe (WSL2)  
+ 
 
-<br><br><br>
+<br>
 
  1. run install.bat  
  2. npm start  
 
-<br>
+<br><br><br>
 
 ### build
 
