@@ -6,7 +6,7 @@
 
 <br>
 
- 1. run install.bat  
+ 1. install.bat  
  2. npm start  
 
 <br><br><br>
