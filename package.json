@@ -4,16 +4,21 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron . --ignore-gpu-blacklist"
+    "start": "electron .",
+    "build": "node build-win"
   },
   "author": "Kunihiro Ando",
   "dependencies": {
-    "electron": "^9.1.0",
     "express": "^4.17.1",
+    "express-ipfilter": "^1.1.2",
     "node-pty": "^0.9.0",
     "pug-static": "^1.0.1",
     "socket.io": "^4.0.0",
     "xterm": "4.11.0",
     "xterm-addon-fit": "^0.5.0"
+  },
+  "devDependencies": {
+    "electron": "^9.1.0",
+    "electron-builder": "^22.10.5"
   }
 }

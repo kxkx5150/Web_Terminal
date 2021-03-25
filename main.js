@@ -1,6 +1,39 @@
 "use strct";
+let cols = 90;
+let rows = 30;
+let fontSize = 16;
+let port = 8890;
+let port2 = 8891;
+let port3 = 8892;
+let home = "c:\\";
+let home2 = "c:\\";
+let home3 = "~/";
+let theme = {
+  foreground: "#ccc",
+  background: "#000",
+  // cursor: "",
+  // black: "",
+  red: "#FF0033",
+  // green: "",
+  // yellow: "",
+  // blue: "",
+  // magenta: "",
+  // cyan: "",
+  // white: "",
+  // brightBlack: "",
+  // brightRed: "",
+  // brightGreen: "",
+  // brightYellow: "",
+  // brightBlue: "",
+  // brightMagenta: "",
+  // brightCyan: "",
+  // brightWhite: "",
+};
+const path = require('path');
+const ips = ["127.0.0.1"];
 const express = require("express");
 const exapp = express();
+const ipfilter = require("express-ipfilter").IpFilter;
 const http = require("http");
 const server = http.createServer(exapp);
 const io = require("socket.io")(server);
@@ -13,20 +46,19 @@ const pty = require("node-pty");
 const { app, Menu, Tray, BrowserWindow } = require("electron");
 let tray = null;
 let mainWindow;
-exapp.use(express.static("public"));
-exapp.use("/xterm.js", express.static("node_modules/xterm"));
-exapp.use("/", pugStatic("views"));
-app.allowRendererProcessReuse = false;
 
-let cols = 90;
-let rows = 30;
-let fontSize = 16;
-let port = 8890;
-let port2 = 8891;
-let port3 = 8892;
-let home = "c:\\";
-let home2 = "c:\\";
-let home3 = "~/";
+
+const pubpath = path.join(__dirname, 'public')
+const viwpath = path.join(__dirname, 'views')
+
+const icopath = path.join(__dirname, 'img/t.ico')
+
+
+exapp.use(ipfilter(ips, { mode: "allow" }));
+exapp.use(express.static(pubpath));
+// exapp.use("/xterm.js", express.static("node_modules/xterm"));
+exapp.use("/", pugStatic(viwpath));
+app.allowRendererProcessReuse = false;
 
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
@@ -39,7 +71,7 @@ if (!gotTheLock) {
     }
   });
   app.whenReady().then(() => {
-    tray = new Tray("t.ico");
+    tray = new Tray(icopath);
     const contextMenu = Menu.buildFromTemplate([
       {
         label: "Show",
@@ -57,7 +89,7 @@ if (!gotTheLock) {
       width: 500,
       height: 500,
       title: "TEST",
-      icon: "t.ico",
+      icon: icopath,
       resizable: false,
       maximizable: false,
       alwaysOnTop: false,
@@ -66,9 +98,8 @@ if (!gotTheLock) {
       },
     });
     mainWindow.setMenu(null);
-    mainWindow.loadURL(`file://${__dirname}/index.html`);
+    mainWindow.loadFile(path.join(__dirname, 'render/index.html'));
     // mainWindow.webContents.openDevTools();
-
     mainWindow.on("minimize", function (event) {
       event.preventDefault();
       mainWindow.hide();
@@ -79,34 +110,15 @@ if (!gotTheLock) {
   });
 }
 app.on("window-all-closed", function () {
-  if (process.platform !== "darwin") {
     app.quit();
-  }
 });
 app.on("activate", function () {
   if (mainWindow === null) {
     createWindow();
   }
 });
-
 io.on("connect", (socket) => {
-  const term = pty.spawn("cmd.exe", [], {
-    name: "xterm-color",
-    cols: cols,
-    rows: rows,
-    cwd: process.env.HOME,
-    env: process.env,
-  });
-  term.onData((d) => socket.emit("data", d));
-  socket.on("data", (d) => term.write(d));
-  socket.on("disconnect", () => {
-    term.destroy();
-  });
-  socket.emit("init", {
-    cols,
-    rows,
-    fontSize,
-  });
+  let term = setConnect("cmd.exe", socket);
   setTimeout(() => {
     if (home) {
       term.write("cd " + home + "\r\n");
@@ -114,9 +126,26 @@ io.on("connect", (socket) => {
     }
   }, 300);
 });
-server.listen(port);
 io2.on("connect", (socket) => {
-  const term = pty.spawn("powershell.exe", [], {
+  let term = setConnect("powershell.exe", socket);
+  setTimeout(() => {
+    if (home2) {
+      term.write("cd " + home2 + "\r\n");
+      term.write("clear\r\n");
+    }
+  }, 300);
+});
+io3.on("connect", (socket) => {
+  let term = setConnect("bash.exe", socket);
+  setTimeout(() => {
+    if (home3) {
+      term.write("cd " + home3 + "\n");
+      term.write("clear\n");
+    }
+  }, 300);
+});
+const setConnect = (shell, socket) => {
+  const term = pty.spawn(shell, [], {
     name: "xterm-color",
     cols: cols,
     rows: rows,
@@ -124,6 +153,7 @@ io2.on("connect", (socket) => {
     env: process.env,
   });
   term.onData((d) => socket.emit("data", d));
+  socket.on("theme", (d) => {});
   socket.on("data", (d) => term.write(d));
   socket.on("disconnect", () => {
     term.destroy();
@@ -132,41 +162,16 @@ io2.on("connect", (socket) => {
     cols,
     rows,
     fontSize,
+    theme,
   });
-  setTimeout(() => {
-    if (home2) {
-      term.write("cd " + home2 + "\r\n");
-      term.write("clear\r\n");
-    }
-  }, 300);
+  return term;
+};
+server.listen(port, "localhost", function () {
+  console.log(server.address());
 });
-server2.listen(port2);
-io3.on("connect", (socket) => {
-  const term = pty.spawn("bash.exe", [], {
-    name: "xterm-color",
-    cols: cols,
-    rows: rows,
-    cwd: process.env.HOME,
-    env: process.env,
-  });
-
-  term.onData((d) => socket.emit("data", d));
-  socket.on("data", (d) => {
-    term.write(d);
-  });
-  socket.on("disconnect", () => {
-    term.destroy();
-  });
-  socket.emit("init", {
-    cols,
-    rows,
-    fontSize,
-  });
-  setTimeout(() => {
-    if (home3) {
-      term.write("cd " + home3 + "\n");
-      term.write("clear\n");
-    }
-  }, 300);
+server2.listen(port2, "localhost", function () {
+  console.log(server2.address());
 });
-server3.listen(port3);
+server3.listen(port3, "localhost", function () {
+  console.log(server3.address());
+});
