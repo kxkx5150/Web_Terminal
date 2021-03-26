@@ -1,9 +1,11 @@
-# Web_Terminal
+# Web Terminal
  Electron App  (windows only)  
  
  cmd.exe, powershell.exe, bash.exe (WSL2)  
  
 <br><br><br>
+
+![キャプチャ](https://user-images.githubusercontent.com/10168979/112648309-c1079f80-8e8c-11eb-8cd1-cac2e960505e.PNG)
 
 WSL2  
 ![キャプチャ](https://user-images.githubusercontent.com/10168979/112599392-3a829c00-8e53-11eb-8356-47280b075c36.PNG)
