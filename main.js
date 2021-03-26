@@ -54,16 +54,11 @@ const pugpath = path.join(__dirname, "views/index.pug");
 
 exapp.use(ipfilter(ips, { mode: "allow" }));
 exapp.use(express.static(pubpath));
-exapp.set('view engine', 'pug');
-exapp.get('/', (req, res) => {
-    res.render(pugpath);
+exapp.set("view engine", "pug");
+exapp.get("/", (req, res) => {
+  res.render(pugpath);
 });
 app.allowRendererProcessReuse = false;
-
-
-
-
-
 
 const getOptions = () => {
   if (!store.has("__opt__")) return;
