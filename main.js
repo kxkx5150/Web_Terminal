@@ -182,7 +182,7 @@ io2.on("connect", (socket) => {
   }, 300);
 });
 io3.on("connect", (socket) => {
-  let term = setConnect("bash.exe", socket);
+  let term = setConnect("wsl.exe", socket);
   setTimeout(() => {
     if (home3) {
       term.write("cd " + home3 + "\n");
