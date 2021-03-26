@@ -9,7 +9,7 @@ let home = "c:\\";
 let home2 = "c:\\";
 let home3 = "~/";
 let theme = {
-  foreground: "#ccc",
+  foreground: "#ddd",
   background: "#000",
   // cursor: "",
   // black: "",
