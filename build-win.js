@@ -2,17 +2,15 @@ const builder = require("electron-builder");
 
 builder.build({
   config: {
-    appId: "com.electron.webterminal",
+    appId: "com.github.kxkx5150.web_terminal",
     directories: {
       output: "dist",
     },
     files: [
-      "node_modules/",
+      "render/",
       "public/",
       "views/",
-      "imt/t.ico",
-      "render/index.html",
-      "render/renderer.js",
+      "img/",
       "main.js",
       "package.json",
       "package-lock.json",

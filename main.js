@@ -47,16 +47,12 @@ const { app, Menu, Tray, BrowserWindow } = require("electron");
 let tray = null;
 let mainWindow;
 
-
 const pubpath = path.join(__dirname, 'public')
 const viwpath = path.join(__dirname, 'views')
-
 const icopath = path.join(__dirname, 'img/t.ico')
-
 
 exapp.use(ipfilter(ips, { mode: "allow" }));
 exapp.use(express.static(pubpath));
-// exapp.use("/xterm.js", express.static("node_modules/xterm"));
 exapp.use("/", pugStatic(viwpath));
 app.allowRendererProcessReuse = false;
 
