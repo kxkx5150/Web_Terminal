@@ -50,12 +50,13 @@ let mainWindow;
 
 const pubpath = path.join(__dirname, "public");
 const icopath = path.join(__dirname, "img/t.ico");
+const pugpath = path.join(__dirname, "views/index.pug");
 
 exapp.use(ipfilter(ips, { mode: "allow" }));
 exapp.use(express.static(pubpath));
 exapp.set('view engine', 'pug');
 exapp.get('/', (req, res) => {
-    res.render('index');
+    res.render(pugpath);
 });
 app.allowRendererProcessReuse = false;
 
