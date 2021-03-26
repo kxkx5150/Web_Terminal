@@ -29,7 +29,7 @@ let theme = {
   // brightCyan: "",
   // brightWhite: "",
 };
-const path = require('path');
+const path = require("path");
 const ips = ["127.0.0.1"];
 const express = require("express");
 const exapp = express();
@@ -43,19 +43,40 @@ const server3 = http.createServer(exapp);
 const io3 = require("socket.io")(server3);
 const pugStatic = require("pug-static");
 const pty = require("node-pty");
-const { app, Menu, Tray, BrowserWindow } = require("electron");
+const { app, Menu, Tray, BrowserWindow, ipcMain } = require("electron");
+const Store = require("electron-store");
+const store = new Store();
 let tray = null;
 let mainWindow;
 
-const pubpath = path.join(__dirname, 'public')
-const viwpath = path.join(__dirname, 'views')
-const icopath = path.join(__dirname, 'img/t.ico')
+const pubpath = path.join(__dirname, "public");
+const viwpath = path.join(__dirname, "views");
+const icopath = path.join(__dirname, "img/t.ico");
 
 exapp.use(ipfilter(ips, { mode: "allow" }));
 exapp.use(express.static(pubpath));
 exapp.use("/", pugStatic(viwpath));
 app.allowRendererProcessReuse = false;
 
+const getOptions = () => {
+  if (!store.has("__opt__")) return;
+  const value = store.get("__opt__");
+  let opt = JSON.parse(value);
+  cols = opt.cols - 0;
+  rows = opt.rows - 0;
+  fontSize = opt.fontSize - 0;
+  port = opt.port - 0;
+  port2 = opt.port2 - 0;
+  port3 = opt.port3 - 0;
+  home = opt.home;
+  home2 = opt.home2;
+  home3 = opt.home3;
+  theme = opt.theme;
+};
+const setOptions = (opt) => {
+  store.set("__opt__", JSON.stringify(opt));
+};
+getOptions();
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
@@ -76,14 +97,18 @@ if (!gotTheLock) {
           mainWindow.show();
         },
       },
-      { label: "Exit", type: "normal", role: "quit" },
+      {
+        label: "Exit",
+        type: "normal",
+        role: "quit",
+      },
     ]);
     tray.on("click", () => (mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()));
     tray.setContextMenu(contextMenu);
 
     mainWindow = new BrowserWindow({
-      width: 500,
-      height: 500,
+      width: 380,
+      height: 640,
       title: "TEST",
       icon: icopath,
       resizable: false,
@@ -91,13 +116,36 @@ if (!gotTheLock) {
       alwaysOnTop: false,
       webPreferences: {
         nodeIntegration: true,
+        contextIsolation: false,
       },
     });
+    ipcMain.on("asynchronous-message", (event, arg) => {
+      if (arg.msg === "init") {
+        let obj = {
+          cols,
+          rows,
+          fontSize,
+          port,
+          port2,
+          port3,
+          home,
+          home2,
+          home3,
+          theme,
+        };
+        event.sender.send("asynchronous-reply", { msg: "opt", obj: obj });
+      } else if (arg.msg === "restart") {
+        app.relaunch();
+        app.exit();
+      } else if (arg.msg === "opt") {
+        setOptions(arg.opt);
+      }
+    });
     mainWindow.setMenu(null);
-    mainWindow.loadFile(path.join(__dirname, 'render/index.html'));
+    mainWindow.loadFile(path.join(__dirname, "render/index.html"));
     // mainWindow.webContents.openDevTools();
-    mainWindow.on("minimize", function (event) {
-      event.preventDefault();
+    mainWindow.on("minimize", function (e) {
+      e.preventDefault();
       mainWindow.hide();
     });
     mainWindow.on("closed", function () {
@@ -106,7 +154,7 @@ if (!gotTheLock) {
   });
 }
 app.on("window-all-closed", function () {
-    app.quit();
+  app.quit();
 });
 app.on("activate", function () {
   if (mainWindow === null) {

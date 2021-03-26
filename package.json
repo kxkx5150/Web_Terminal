@@ -1,7 +1,7 @@
 {
   "name": "web_terminal",
-  "version": "1.0.0",
-  "description": "Terminal based Electron apps. ",
+  "version": "1.1.0",
+  "description": "Browser Terminal based Electron apps.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -9,6 +9,7 @@
   },
   "author": "Kunihiro Ando",
   "dependencies": {
+    "electron-store": "^7.0.2",
     "express": "^4.17.1",
     "express-ipfilter": "^1.1.2",
     "node-pty": "~0.10.0",

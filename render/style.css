@@ -1,0 +1,43 @@
+html {
+  padding: 0;
+  margin: 0;
+  background: #222;
+  color: #fff;
+}
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+  font-family: arial, sans-serif;
+}
+hr {
+  margin: 24px 4px;
+  border: #444 1px solid;
+}
+#restart_btn {
+  font-size: 16px;
+}
+.button_container {
+  text-align: center;
+  padding: 8px;
+}
+.settings_container {
+  padding: 8px 12px;
+}
+.container {
+  margin-bottom: 12px;
+}
+.number_label {
+  display: inline-block;
+  width: 150px;
+}
+.number_input {
+  width: 80px;
+  text-align: right;
+  padding: 4px;
+}
+.text_input {
+  width: 120px;
+  text-align: left;
+  padding: 4px;
+}

@@ -1,13 +1,94 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <title></title>
+    <meta charset="UTF-8" />
+    <title>Web Terminal</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="button_container">
+      <button id="restart_btn">Restart</button>
+    </div>
+    <hr />
 
+    <div class="settings_container">
+      <div class="container">
+        <label class="number_label">cols</label>:
+        <input type="number" step="1" max="300" min="50" value="90" class="number_input" id="cols_int" />
+      </div>
+      <div class="container">
+        <label class="number_label">rows</label>:
+        <input type="number" step="1" max="300" min="1" value="30" class="number_input" id="rows_int" />
+      </div>
+      <div class="container">
+        <label class="number_label">Font size</label>:
+        <input
+          type="number"
+          step="1"
+          max="50"
+          min="8"
+          value="16"
+          class="number_input"
+          id="fontsize_int"
+        />
+      </div>
+
+      <hr />
+      <div>
+        <div class="container">
+          <label class="number_label">cmd port</label>:
+          <input
+            type="number"
+            step="1"
+            max="65535"
+            min="1024"
+            value="8890"
+            class="number_input"
+            id="port_int"
+          />
+        </div>
+        <div class="container">
+          <label class="number_label">powershell port</label>:
+          <input
+            type="number"
+            step="1"
+            max="65535"
+            min="1024"
+            value="8891"
+            class="number_input"
+            id="port2_int"
+          />
+        </div>
+        <div class="container">
+          <label class="number_label">bash (wsl) port</label>:
+          <input
+            type="number"
+            step="1"
+            max="65535"
+            min="1024"
+            value="8892"
+            class="number_input"
+            id="port3_int"
+          />
+        </div>
+
+        <hr />
+        <div class="container">
+          <label class="number_label">cmd home</label>:
+          <input type="text" class="text_input" value="c:\" id="home_int" />
+        </div>
+
+        <div class="container">
+          <label class="number_label">powershell home</label>:
+          <input type="text" class="text_input" value="c:\" id="home2_int" />
+        </div>
+
+        <div class="container">
+          <label class="number_label">bash home</label>:
+          <input type="text" class="text_input" value="~/" id="home3_int" />
+        </div>
+      </div>
+    </div>
   </body>
-  <script>
-    // require('./renderer.js')
-  </script>
+  <script src="renderer.js"></script>
 </html>
