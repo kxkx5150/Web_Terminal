@@ -41,7 +41,6 @@ const server2 = http.createServer(exapp);
 const io2 = require("socket.io")(server2);
 const server3 = http.createServer(exapp);
 const io3 = require("socket.io")(server3);
-const pugStatic = require("pug-static");
 const pty = require("node-pty");
 const { app, Menu, Tray, BrowserWindow, ipcMain } = require("electron");
 const Store = require("electron-store");
@@ -50,13 +49,20 @@ let tray = null;
 let mainWindow;
 
 const pubpath = path.join(__dirname, "public");
-const viwpath = path.join(__dirname, "views");
 const icopath = path.join(__dirname, "img/t.ico");
 
 exapp.use(ipfilter(ips, { mode: "allow" }));
 exapp.use(express.static(pubpath));
-exapp.use("/", pugStatic(viwpath));
+exapp.set('view engine', 'pug');
+exapp.get('/', (req, res) => {
+    res.render('index');
+});
 app.allowRendererProcessReuse = false;
+
+
+
+
+
 
 const getOptions = () => {
   if (!store.has("__opt__")) return;

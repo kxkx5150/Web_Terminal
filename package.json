@@ -13,7 +13,7 @@
     "express": "^4.17.1",
     "express-ipfilter": "^1.1.2",
     "node-pty": "~0.10.0",
-    "pug-static": "^1.0.1",
+    "pug": "^3.0.2",
     "socket.io": "^4.0.0",
     "xterm": "^4.11.0",
     "xterm-addon-fit": "^0.5.0"
