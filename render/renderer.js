@@ -33,7 +33,7 @@ const addEvents = () => {
   document.getElementById("port_int").addEventListener("change", getOptions);
   document.getElementById("port2_int").addEventListener("change", getOptions);
   document.getElementById("port3_int").addEventListener("change", getOptions);
-  
+
   let elems = document.querySelectorAll(".text_input");
   elems.forEach(elem => {
     elem.addEventListener("change", getOptions);
@@ -55,6 +55,12 @@ const getOptions = (e) => {
     theme: theme,
   };
   ipcRenderer.send("asynchronous-message", { msg: "opt", opt: opt });
+
+  if (e.target.id === "cols_int" || e.target.id === "rows_int")
+    ipcRenderer.send("asynchronous-message", { msg: "changesize", opt: opt });
+
+  if (e.target.id === "fontsize_int")
+    ipcRenderer.send("asynchronous-message", { msg: "changefont", opt: opt });
 };
 document.getElementById("restart_btn").addEventListener("click", () => {
   ipcRenderer.send("asynchronous-message", { msg: "restart" });

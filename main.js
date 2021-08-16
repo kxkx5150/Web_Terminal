@@ -49,6 +49,8 @@ const Store = require("electron-store");
 const store = new Store();
 let tray = null;
 let mainWindow;
+const sockets = {};
+const socketids = [];
 
 const pubpath = path.join(__dirname, "public");
 const icopath = path.join(__dirname, "img/t.ico");
@@ -66,6 +68,9 @@ const getOptions = () => {
   if (!store.has("__opt__")) return;
   const value = store.get("__opt__");
   let opt = JSON.parse(value);
+  setOptions(opt, true);
+};
+const setOptions = (opt, nosave) => {
   cols = opt.cols - 0;
   rows = opt.rows - 0;
   fontSize = opt.fontSize - 0;
@@ -78,22 +83,8 @@ const getOptions = () => {
   theme = opt.theme;
   distro = opt.distro;
   user = opt.user;
+  if (!nosave) store.set("__opt__", JSON.stringify(opt));
 };
-const setOptions = (opt) => {
-  cols = opt.cols - 0;
-  rows = opt.rows - 0;
-  fontSize = opt.fontSize - 0;
-  home = opt.home;
-  home2 = opt.home2;
-  home3 = opt.home3;
-  store.set("__opt__", JSON.stringify(opt));
-};
-
-
-
-
-
-
 
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
@@ -125,8 +116,8 @@ if (!gotTheLock) {
     tray.setContextMenu(contextMenu);
 
     mainWindow = new BrowserWindow({
-      width: 380,
-      height: 640,
+      width: 420,
+      height: 650,
       title: "TEST",
       icon: icopath,
       resizable: false,
@@ -159,6 +150,10 @@ if (!gotTheLock) {
         app.exit();
       } else if (arg.msg === "opt") {
         setOptions(arg.opt);
+      } else if (arg.msg === "changefont") {
+        sendAll(arg.msg);
+      } else if (arg.msg === "changesize") {
+        sendAll(arg.msg);
       }
     });
     mainWindow.setMenu(null);
@@ -181,6 +176,20 @@ app.on("activate", function () {
     createWindow();
   }
 });
+
+const sendAll = (msg) => {
+  for (let index = 0; index < socketids.length; index++) {
+    let id = socketids[index];
+    let socket = sockets[id];
+    socket.emit(msg, {
+      cols,
+      rows,
+      fontSize
+    });
+  }
+}
+
+
 io.on("connect", (socket) => {
   let term = setConnect("cmd.exe", socket);
   setTimeout(() => {
@@ -188,7 +197,7 @@ io.on("connect", (socket) => {
       term.write("cd " + home + "\r\n");
       term.write("clear\r\n");
     }
-  }, 300);
+  }, 150);
 });
 io2.on("connect", (socket) => {
   let term = setConnect("powershell.exe", socket);
@@ -197,7 +206,7 @@ io2.on("connect", (socket) => {
       term.write("cd " + home2 + "\r\n");
       term.write("clear\r\n");
     }
-  }, 300);
+  }, 150);
 });
 io3.on("connect", (socket) => {
   let term = setConnect("wsl.exe", socket, ['-d', distro, '-u', user]);
@@ -206,8 +215,14 @@ io3.on("connect", (socket) => {
       term.write("cd " + home3 + "\n");
       term.write("clear\n");
     }
-  }, 300);
+  }, 150);
+  sockets[socket.id] = socket;
+  socketids.push(socket.id);
 });
+
+
+
+
 const setConnect = (shell, socket, opts) => {
   if (!opts) opts = [];
   const term = pty.spawn(shell, opts, {
@@ -221,6 +236,11 @@ const setConnect = (shell, socket, opts) => {
   socket.on("theme", (d) => { });
   socket.on("data", (d) => term.write(d));
   socket.on("disconnect", () => {
+    delete sockets[socket.id];
+    let idx = socketids.indexOf(socket.id)
+    if (idx > -1) {
+      socketids.splice(idx, 1);
+    }
     term.destroy();
   });
   socket.emit("init", {
@@ -232,7 +252,6 @@ const setConnect = (shell, socket, opts) => {
   return term;
 };
 getOptions();
-
 server.listen(port, "localhost", function () {
   console.log(server.address());
 });

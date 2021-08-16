@@ -22,12 +22,22 @@
       socket.emit("data", d);
     });
   });
+
+  socket.on("changefont", (d) => {
+    changeFont(d.fontSize-0);
+  });
+  socket.on("changesize", (d) => {
+    console.log("changesize");
+    resizeTerm(d.cols, d.rows);
+  });
+
   const resizeTerm = (cols, rows) => {
     term.resize(cols - 0, rows - 0);
     fitAddon.fit();
   };
   const changeFont = (val) => {
     term.setOption("fontSize", val);
-    term.setOption("fontWeight", "normal");
+    fitAddon.fit();
+    console.log("change");
   };
 })();
