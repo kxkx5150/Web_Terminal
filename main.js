@@ -10,26 +10,32 @@ let home2 = "c:\\";
 let home3 = "~/";
 let distro = "";
 let user = "root";
+let tray = null;
+let mainWindow;
 let theme = {
-  foreground: "#ddd",
-  background: "#000",
-  // cursor: "",
-  // black: "",
-  red: "#FF0033",
-  // green: "",
-  // yellow: "",
-  // blue: "",
-  // magenta: "",
-  // cyan: "",
-  // white: "",
-  // brightBlack: "",
-  // brightRed: "",
-  // brightGreen: "",
-  // brightYellow: "",
-  // brightBlue: "",
-  // brightMagenta: "",
-  // brightCyan: "",
-  // brightWhite: "",
+  "name" : "Campbell",
+  "cursorColor": "#FFFFFF",
+  "selectionBackground": "#FFFFFF",
+
+  "background" : "#050505",
+  "foreground" : "#CCCCCC",
+
+  "black" : "#0C0C0C",
+  "blue" : "#0037DA",
+  "cyan" : "#3A96DD",
+  "green" : "#13A10E",
+  "purple" : "#881798",
+  "red" : "#C50F1F",
+  "white" : "#CCCCCC",
+  "yellow" : "#C19C00",
+  "brightBlack" : "#767676",
+  "brightBlue" : "#3B78FF",
+  "brightCyan" : "#61D6D6",
+  "brightGreen" : "#16C60C",
+  "brightPurple" : "#B4009E",
+  "brightRed" : "#E74856",
+  "brightWhite" : "#F2F2F2",
+  "brightYellow" : "#F9F1A5"
 };
 const path = require("path");
 const ips = ["127.0.0.1"];
@@ -47,14 +53,15 @@ const pty = require("node-pty");
 const { app, Menu, Tray, BrowserWindow, ipcMain } = require("electron");
 const Store = require("electron-store");
 const store = new Store();
-let tray = null;
-let mainWindow;
+
 const sockets = {};
 const socketids = [];
-
 const pubpath = path.join(__dirname, "public");
 const icopath = path.join(__dirname, "img/t.ico");
-const pugpath = path.join(__dirname, "views/index.pug");
+// const pugpath = path.join(__dirname, "views/index.pug");
+const pugpath = path.join(__dirname, "views/terminal.pug");
+
+
 
 exapp.use(ipfilter(ips, { mode: "allow" }));
 exapp.use(express.static(pubpath));
@@ -80,7 +87,7 @@ const setOptions = (opt, nosave) => {
   home = opt.home;
   home2 = opt.home2;
   home3 = opt.home3;
-  theme = opt.theme;
+  // theme = opt.theme;
   distro = opt.distro;
   user = opt.user;
   if (!nosave) store.set("__opt__", JSON.stringify(opt));
@@ -154,6 +161,10 @@ if (!gotTheLock) {
         sendAll(arg.msg);
       } else if (arg.msg === "changesize") {
         sendAll(arg.msg);
+        // sendAll("autofit");
+
+
+        
       }
     });
     mainWindow.setMenu(null);
@@ -178,8 +189,8 @@ app.on("activate", function () {
 });
 
 const sendAll = (msg) => {
-  for (let index = 0; index < socketids.length; index++) {
-    let id = socketids[index];
+  for (let idx = 0; idx < socketids.length; idx++) {
+    let id = socketids[idx];
     let socket = sockets[id];
     socket.emit(msg, {
       cols,
@@ -191,31 +202,13 @@ const sendAll = (msg) => {
 
 
 io.on("connect", (socket) => {
-  let term = setConnect("cmd.exe", socket);
-  setTimeout(() => {
-    if (home) {
-      term.write("cd " + home + "\r\n");
-      term.write("clear\r\n");
-    }
-  }, 150);
+  setConnect("cmd.exe", socket);
 });
 io2.on("connect", (socket) => {
-  let term = setConnect("powershell.exe", socket);
-  setTimeout(() => {
-    if (home2) {
-      term.write("cd " + home2 + "\r\n");
-      term.write("clear\r\n");
-    }
-  }, 150);
+  setConnect("powershell.exe", socket);
 });
 io3.on("connect", (socket) => {
-  let term = setConnect("wsl.exe", socket, ['-d', distro, '-u', user]);
-  setTimeout(() => {
-    if (home3) {
-      term.write("cd " + home3 + "\n");
-      term.write("clear\n");
-    }
-  }, 150);
+  setConnect("wsl.exe", socket, ['-d', distro, '-u', user]);
   sockets[socket.id] = socket;
   socketids.push(socket.id);
 });
@@ -229,7 +222,7 @@ const setConnect = (shell, socket, opts) => {
     name: "xterm-color",
     cols: cols,
     rows: rows,
-    cwd: process.env.HOME,
+    cwd: home2,
     env: process.env,
   });
   term.onData((d) => socket.emit("data", d));
@@ -243,6 +236,28 @@ const setConnect = (shell, socket, opts) => {
     }
     term.destroy();
   });
+  socket.on("resize", (size) => {
+    term.resize(
+      Math.max(size ? size.cols : term.cols, 1),
+      Math.max(size ? size.rows : term.rows, 1)
+    );
+  });
+  socket.on("ready", () => {
+    if (shell === "cmd.exe") {
+      if(!home)return;
+      term.write("cd " + home + "\r\n");
+    }else if (shell === "powershell.exe") {
+      if(!home2)return;
+      term.write("cd " + home2 + "\r\n");
+    }else if (shell === "wsl.exe") {
+      if(!home3)return;
+      term.write("cd " + home3 + "\n");
+    }
+  });
+
+
+
+
   socket.emit("init", {
     cols,
     rows,

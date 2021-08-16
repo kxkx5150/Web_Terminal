@@ -1,0 +1,11 @@
+html{
+  margin: 0;
+  padding: 0;
+  background: #111;
+}
+#terminal{
+  /* width: 600px;
+  height: 400px; */
+  box-sizing: border-box;
+  /* display: inline-block; */
+}
