@@ -8,6 +8,8 @@ let port3 = 8892;
 let home = "c:\\";
 let home2 = "c:\\";
 let home3 = "~/";
+let distro = "";
+let user = "root";
 let theme = {
   foreground: "#ddd",
   background: "#000",
@@ -74,6 +76,8 @@ const getOptions = () => {
   home2 = opt.home2;
   home3 = opt.home3;
   theme = opt.theme;
+  distro = opt.distro;
+  user = opt.user;
 };
 const setOptions = (opt) => {
   store.set("__opt__", JSON.stringify(opt));
@@ -134,6 +138,8 @@ if (!gotTheLock) {
           home2,
           home3,
           theme,
+          distro,
+          user
         };
         event.sender.send("asynchronous-reply", { msg: "opt", obj: obj });
       } else if (arg.msg === "restart") {
@@ -182,7 +188,7 @@ io2.on("connect", (socket) => {
   }, 300);
 });
 io3.on("connect", (socket) => {
-  let term = setConnect("wsl.exe", socket);
+  let term = setConnect("wsl.exe", socket, ['-d', distro, '-u', user]);
   setTimeout(() => {
     if (home3) {
       term.write("cd " + home3 + "\n");
@@ -190,8 +196,9 @@ io3.on("connect", (socket) => {
     }
   }, 300);
 });
-const setConnect = (shell, socket) => {
-  const term = pty.spawn(shell, [], {
+const setConnect = (shell, socket, opts) => {
+  if (!opts) opts = [];
+  const term = pty.spawn(shell, opts, {
     name: "xterm-color",
     cols: cols,
     rows: rows,
@@ -199,7 +206,7 @@ const setConnect = (shell, socket) => {
     env: process.env,
   });
   term.onData((d) => socket.emit("data", d));
-  socket.on("theme", (d) => {});
+  socket.on("theme", (d) => { });
   socket.on("data", (d) => term.write(d));
   socket.on("disconnect", () => {
     term.destroy();

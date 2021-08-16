@@ -20,20 +20,16 @@ const setOptions = (opt) => {
   document.getElementById("home_int").value = opt.home;
   document.getElementById("home2_int").value = opt.home2;
   document.getElementById("home3_int").value = opt.home3;
+
+  document.getElementById("dist_int").value = opt.distro;
+  document.getElementById("user_int").value = opt.user;
   theme = opt.theme;
 };
 const addEvents = () => {
-  document.getElementById("cols_int").addEventListener("change", getOptions);
-  document.getElementById("rows_int").addEventListener("change", getOptions);
-  document.getElementById("fontsize_int").addEventListener("change", getOptions);
-
-  document.getElementById("port_int").addEventListener("change", getOptions);
-  document.getElementById("port2_int").addEventListener("change", getOptions);
-  document.getElementById("port3_int").addEventListener("change", getOptions);
-
-  document.getElementById("home_int").addEventListener("change", getOptions);
-  document.getElementById("home2_int").addEventListener("change", getOptions);
-  document.getElementById("home3_int").addEventListener("change", getOptions);
+  let elems = document.querySelectorAll(".text_input");
+  elems.forEach(elem => {
+    elem.addEventListener("change", getOptions);
+  });
 };
 const getOptions = (e) => {
   let opt = {
@@ -46,6 +42,8 @@ const getOptions = (e) => {
     home: document.getElementById("home_int").value,
     home2: document.getElementById("home2_int").value,
     home3: document.getElementById("home3_int").value,
+    distro: document.getElementById("dist_int").value,
+    user: document.getElementById("user_int").value,
     theme: theme,
   };
   ipcRenderer.send("asynchronous-message", { msg: "opt", opt: opt });

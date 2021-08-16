@@ -11,7 +11,7 @@ body {
   font-family: arial, sans-serif;
 }
 hr {
-  margin: 24px 4px;
+  margin: 12px 4px;
   border: #444 1px solid;
 }
 #restart_btn {
@@ -22,7 +22,7 @@ hr {
   padding: 8px;
 }
 .settings_container {
-  padding: 8px 12px;
+  padding: 4px 12px;
 }
 .container {
   margin-bottom: 12px;

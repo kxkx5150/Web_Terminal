@@ -1,7 +1,11 @@
 # Web Terminal
  Electron App  (windows only)  
  
- cmd.exe, powershell.exe, bash.exe (WSL2)  
+<br>
+
+ cmd.exe,  
+ powershell.exe,  
+ bash.exe (WSL2)  
  
 <br><br><br>
 
@@ -12,17 +16,29 @@ WSL2
 
 <br><br>
 
-## Command prompt  
+node v12.21  
+python2.7  
+electron v11.4.11  
 
-node v12.21
+<br>
+Visual Studio Build Tools  
+
+<br>
+
+npm config set python python2.7   
+npm config set msvs_version 2017   
+
+<br><br><br><br>
+
+## Command prompt  (cmd.exe)
 
 <br>
 
 1. npm install  
-2. ".\node_modules\.bin\electron-rebuild"  
+2. ".\node_modules\\.bin\electron-rebuild"  
 3. npm start  
 
-<br><br>
+<br><br><br>
 
 ## Browser
 
@@ -33,7 +49,7 @@ http://localhost:8891 powershell.exe
 http://localhost:8892 bash.exe (wsl2)  
 
 
-<br><br><br>
+<br><br><br><br>
 
 ## build
 
@@ -41,9 +57,3 @@ http://localhost:8892 bash.exe (wsl2)
 
 1. npm run build
 2. goto dist directory
-
-<br><br>
-
-
-
- 
