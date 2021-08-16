@@ -26,6 +26,14 @@ const setOptions = (opt) => {
   theme = opt.theme;
 };
 const addEvents = () => {
+  document.getElementById("cols_int").addEventListener("change", getOptions);
+  document.getElementById("rows_int").addEventListener("change", getOptions);
+  document.getElementById("fontsize_int").addEventListener("change", getOptions);
+
+  document.getElementById("port_int").addEventListener("change", getOptions);
+  document.getElementById("port2_int").addEventListener("change", getOptions);
+  document.getElementById("port3_int").addEventListener("change", getOptions);
+  
   let elems = document.querySelectorAll(".text_input");
   elems.forEach(elem => {
     elem.addEventListener("change", getOptions);

@@ -80,9 +80,21 @@ const getOptions = () => {
   user = opt.user;
 };
 const setOptions = (opt) => {
+  cols = opt.cols - 0;
+  rows = opt.rows - 0;
+  fontSize = opt.fontSize - 0;
+  home = opt.home;
+  home2 = opt.home2;
+  home3 = opt.home3;
   store.set("__opt__", JSON.stringify(opt));
 };
-getOptions();
+
+
+
+
+
+
+
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
@@ -219,6 +231,8 @@ const setConnect = (shell, socket, opts) => {
   });
   return term;
 };
+getOptions();
+
 server.listen(port, "localhost", function () {
   console.log(server.address());
 });
