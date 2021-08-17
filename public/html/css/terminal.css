@@ -4,13 +4,12 @@ html,body{
   background: transparent;
 }
 #terminal {
-  /* width: 600px;
-  height: 400px; */
   box-sizing: border-box;
   display: inline-block;
-}
-.xterm .xterm-screen {
   padding: 4px;
+}
+div{
+  box-sizing: border-box;
 }
 ::-webkit-scrollbar {
   width: 10px;

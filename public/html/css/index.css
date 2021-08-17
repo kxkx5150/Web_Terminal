@@ -1,17 +1,25 @@
-html,body{
+html{
   margin: 0;
   padding: 0;
-  background: #333;
+}
+body{
+  margin: 0;
+  padding: 0;
+  background: #050505;
+  margin-top: 12px;
+  margin-left: 12px;
 }
 iframe{
-  padding: 0;
-  width: 100%;
-  height: 400px;
-  overflow:hidden;
-  margin: 8px;
+  display: inline-block;
+  padding: 4px;
+  box-sizing: border-box;
+  border: 4px solid #333;
+  margin: 12px;
+  background: #000;
 }
 .ifrm_container{
   display: inline-block;
+  box-sizing: border-box;
 }
 ::-webkit-scrollbar {
   width: 10px;

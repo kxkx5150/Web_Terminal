@@ -30,6 +30,6 @@ function createIframe(id){
   ifrm.setAttribute("id","ifrm"+id);
 }
 function resizeIFrame(iFrame,data) {
-  iFrame.style.width = data.width + 8 + "px";
-  iFrame.style.height = data.height + 8 + "px";
+  iFrame.style.width = data.width + 24 + "px";
+  iFrame.style.height = data.height + 24 + "px";
 }
