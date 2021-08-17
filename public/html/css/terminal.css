@@ -8,9 +8,7 @@ html,body{
   display: inline-block;
   padding: 4px;
 }
-div{
-  box-sizing: border-box;
-}
+
 ::-webkit-scrollbar {
   width: 10px;
 }

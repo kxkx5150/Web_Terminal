@@ -69,11 +69,11 @@ exapp.set("view engine", "pug");
 exapp.get("/", (req, res) => {
   let rport = req.get('host').split(":")[1];
   if(port === rport - 0){
-    res.render(pugpath,{ shell: "cmd-"+createterm});
+    res.render(pugpath,{ shell: "cmd-"+createterm+"-"+rows});
   }else if(port2 === rport - 0){
-    res.render(pugpath,{ shell: "ps-"+createterm});
+    res.render(pugpath,{ shell: "ps-"+createterm+"-"+rows});
   }else if(port3 === rport - 0){
-    res.render(pugpath,{ shell: "wsl-"+createterm});
+    res.render(pugpath,{ shell: "wsl-"+createterm+"-"+rows});
   }
 });
 app.allowRendererProcessReuse = false;

@@ -5,15 +5,33 @@
   let intsize = {};
   let timerid = null;
   let resizeflg = false;
-  
+  let rtimerid = null;
+  let termid = location.search.split("?id=")[1];
+
   document.body.addEventListener('ready', function (e) {
+    console.log("--- terminal "+termid+" ---");
     console.log("ready");
     resizeflg = true;
     socket.emit("ready");
     autoFit();
   }, false);
-
-
+  window.addEventListener('message', function (e) {
+    let data = e.data;
+    if (data.msg === "resize") {
+      this.clearTimeout(rtimerid);
+      rtimerid = this.setTimeout(()=>{
+        let w = e.data.width;
+        let h = e.data.height;
+        this.document.getElementById("terminal").style.width = w + "px";
+        // this.document.getElementById("terminal").style.height = h + "px";
+        autoFit();
+      },200)
+    }else if(data.msg === "rows"){
+      let data = e.data;
+      intsize.rows = data.rows;
+      autoFit();
+    }
+  });
 
   const fitAddon = new FitAddon();
   const socket = io();
@@ -44,12 +62,12 @@
       socket.emit("resize", size);
     });
     term.onRender((d) => {
-      if(resizeflg){
+      if (resizeflg) {
         clearTimeout(timerid);
-        timerid = setTimeout(()=>{
+        timerid = setTimeout(() => {
           resizeflg = false;
           resizeMsg();
-        },300)
+        }, 500)
       }
 
       if (ready) return;
@@ -93,14 +111,15 @@
     };
     term.resize(size.cols, size.rows);
   };
-  const resizeMsg = () =>{
+  const resizeMsg = () => {
     let term = document.getElementById("terminal");
     let msg = {
-      msg:"resize",
-      width:term.scrollWidth,
-      height:term.scrollHeight
+      id:termid,
+      msg: "resize",
+      width: term.scrollWidth,
+      height: term.scrollHeight
     }
-    parent.postMessage(msg,"*");
+    parent.postMessage(msg, "*");
   }
   const changeFont = (val) => {
     term.setOption("fontSize", val);
