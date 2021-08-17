@@ -8,13 +8,11 @@
  bash.exe (WSL2)  
  
 <br><br><br>
+![キャプチャ](https://user-images.githubusercontent.com/10168979/129659651-e411b507-cf46-463f-b855-64c0636e4552.PNG)
+![aaa](https://user-images.githubusercontent.com/10168979/129659652-c593d012-4e81-4507-9af0-e6eda4308874.PNG)
+![スクリーンショット (1)](https://user-images.githubusercontent.com/10168979/129659653-02c8281c-2286-467e-a7dd-5fc8ebb0ab7d.png)
 
-![キャプチャ](https://user-images.githubusercontent.com/10168979/112648309-c1079f80-8e8c-11eb-8cd1-cac2e960505e.PNG)
-
-WSL2  
-![キャプチャ](https://user-images.githubusercontent.com/10168979/112599392-3a829c00-8e53-11eb-8356-47280b075c36.PNG)
-
-<br><br>
+<br><br><br>
 
 node v12.21  
 python2.7  
