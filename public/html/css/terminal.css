@@ -1,11 +1,23 @@
-html{
+html,body{
   margin: 0;
   padding: 0;
-  background: #111;
+  background: transparent;
 }
-#terminal{
+#terminal {
   /* width: 600px;
   height: 400px; */
   box-sizing: border-box;
-  /* display: inline-block; */
+  display: inline-block;
+}
+.xterm .xterm-screen {
+  padding: 4px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color:#444;
 }

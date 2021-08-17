@@ -3,6 +3,15 @@
   let ready = false;
   let term = null;
   let intsize = {};
+  let timerid = null;
+
+  document.body.addEventListener('ready', function (e) {
+    console.log("ready")
+    socket.emit("ready");
+    autoFit();
+  }, false);
+
+
 
   const fitAddon = new FitAddon();
   const socket = io();
@@ -32,11 +41,19 @@
       socket.emit("resize", size);
     });
     term.onRender((d) => {
+      clearTimeout(timerid);
+      timerid = setTimeout(()=>{
+        resizeMsg();
+      },300)
       if (ready) return;
       ready = true;
-      socket.emit("ready");
-      console.log("loaded")
+      const e = new Event('ready');
+      document.body.dispatchEvent(e);
     });
+
+
+
+
     term.attachCustomKeyEventHandler(e => {
       if (e.key === 'v' && e.ctrlKey) {
         return false;
@@ -46,7 +63,6 @@
   socket.on("changefont", (d) => {
     console.log("changefont");
     changeFont(d.fontSize - 0);
-    autoFit();
   });
   socket.on("changesize", (d) => {
     console.log("changesize");
@@ -70,7 +86,17 @@
     };
     term.resize(size.cols, size.rows);
   };
+  const resizeMsg = () =>{
+    let term = document.getElementById("terminal");
+    let msg = {
+      msg:"resize",
+      width:term.scrollWidth,
+      height:term.scrollHeight
+    }
+    parent.postMessage(msg,"*");
+  }
   const changeFont = (val) => {
     term.setOption("fontSize", val);
+    fitAddon.fit();
   };
 })();

@@ -58,9 +58,7 @@ const sockets = {};
 const socketids = [];
 const pubpath = path.join(__dirname, "public");
 const icopath = path.join(__dirname, "img/t.ico");
-// const pugpath = path.join(__dirname, "views/index.pug");
-const pugpath = path.join(__dirname, "views/terminal.pug");
-
+const pugpath = path.join(__dirname, "views/index.pug");
 
 
 exapp.use(ipfilter(ips, { mode: "allow" }));
