@@ -6,8 +6,17 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="button_container">
+    <div class="button_container" style="display: none">
       <button id="restart_btn">Restart</button>
+    </div>
+    <div class="button_container">
+      <select id="create_terminal_slct">
+        <option value="1">1 terminal</option>
+        <option value="2" selected>2 terminals</option>
+        <option value="4">4 terminals</option>
+        <option value="6">6 terminals</option>
+        <option value="8">8 terminals</option>
+      </select>
     </div>
     <hr />
 
@@ -83,16 +92,16 @@
           <input type="text" class="text_input" value="c:\" id="home2_int" />
         </div>
         <div>
-          <hr>
-          <label style="color: cornflowerblue;">wsl</label>
-          
-          <div class="container" style="padding-top: 8px;">
+          <hr />
+          <label style="color: cornflowerblue">wsl</label>
+
+          <div class="container" style="padding-top: 8px">
             <label class="number_label">distro</label>:
-            <input type="text" class="text_input" value="~/" id="dist_int" placeholder="Ubuntu-20.04"/>
+            <input type="text" class="text_input" value="~/" id="dist_int" placeholder="Ubuntu-20.04" />
           </div>
           <div class="container">
             <label class="number_label">user</label>:
-            <input type="text" class="text_input" value="" id="user_int" placeholder="root"/>
+            <input type="text" class="text_input" value="" id="user_int" placeholder="root" />
           </div>
           <div class="container">
             <label class="number_label">home</label>:

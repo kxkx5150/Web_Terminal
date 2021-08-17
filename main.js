@@ -37,6 +37,8 @@ let theme = {
   "brightWhite" : "#F2F2F2",
   "brightYellow" : "#F9F1A5"
 };
+let createterm = 4;
+
 const path = require("path");
 const ips = ["127.0.0.1"];
 const express = require("express");
@@ -60,12 +62,19 @@ const pubpath = path.join(__dirname, "public");
 const icopath = path.join(__dirname, "img/t.ico");
 const pugpath = path.join(__dirname, "views/index.pug");
 
-
 exapp.use(ipfilter(ips, { mode: "allow" }));
 exapp.use(express.static(pubpath));
 exapp.set("view engine", "pug");
+
 exapp.get("/", (req, res) => {
-  res.render(pugpath);
+  let rport = req.get('host').split(":")[1];
+  if(port === rport - 0){
+    res.render(pugpath,{ shell: "cmd-"+createterm});
+  }else if(port2 === rport - 0){
+    res.render(pugpath,{ shell: "ps-"+createterm});
+  }else if(port3 === rport - 0){
+    res.render(pugpath,{ shell: "wsl-"+createterm});
+  }
 });
 app.allowRendererProcessReuse = false;
 
@@ -76,6 +85,7 @@ const getOptions = () => {
   setOptions(opt, true);
 };
 const setOptions = (opt, nosave) => {
+  createterm = opt.term-0;
   cols = opt.cols - 0;
   rows = opt.rows - 0;
   fontSize = opt.fontSize - 0;
@@ -121,8 +131,8 @@ if (!gotTheLock) {
     tray.setContextMenu(contextMenu);
 
     mainWindow = new BrowserWindow({
-      width: 420,
-      height: 650,
+      width: 400,
+      height: 670,
       title: "TEST",
       icon: icopath,
       resizable: false,
@@ -136,6 +146,7 @@ if (!gotTheLock) {
     ipcMain.on("asynchronous-message", (event, arg) => {
       if (arg.msg === "init") {
         let obj = {
+          term:createterm,
           cols,
           rows,
           fontSize,
@@ -266,11 +277,8 @@ const setConnect = (shell, socket, opts) => {
 };
 getOptions();
 server.listen(port, "localhost", function () {
-  console.log(server.address());
 });
 server2.listen(port2, "localhost", function () {
-  console.log(server2.address());
 });
 server3.listen(port3, "localhost", function () {
-  console.log(server3.address());
 });

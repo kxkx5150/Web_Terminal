@@ -1,6 +1,9 @@
 "use strct";
 window.addEventListener('DOMContentLoaded', function (e) {
-  for (let idx = 0; idx < 4; idx++) {
+  let ttl = document.title;
+  let val = ttl.split("-")[1]-0;
+
+  for (let idx = 0; idx < val; idx++) {
     createIframe(idx);
   }
 

@@ -14,6 +14,10 @@ hr {
   margin: 12px 4px;
   border: #444 1px solid;
 }
+#create_terminal_slct{
+  font-size: 13px;
+  padding: 4px 12px;
+}
 #restart_btn {
   font-size: 16px;
 }

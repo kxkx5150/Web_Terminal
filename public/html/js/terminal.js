@@ -4,9 +4,11 @@
   let term = null;
   let intsize = {};
   let timerid = null;
-
+  let resizeflg = false;
+  
   document.body.addEventListener('ready', function (e) {
-    console.log("ready")
+    console.log("ready");
+    resizeflg = true;
     socket.emit("ready");
     autoFit();
   }, false);
@@ -37,14 +39,19 @@
       socket.emit("data", d);
     });
     term.onResize(size => {
+      resizeflg = true;
       console.log("resize");
       socket.emit("resize", size);
     });
     term.onRender((d) => {
-      clearTimeout(timerid);
-      timerid = setTimeout(()=>{
-        resizeMsg();
-      },300)
+      if(resizeflg){
+        clearTimeout(timerid);
+        timerid = setTimeout(()=>{
+          resizeflg = false;
+          resizeMsg();
+        },300)
+      }
+
       if (ready) return;
       ready = true;
       const e = new Event('ready');

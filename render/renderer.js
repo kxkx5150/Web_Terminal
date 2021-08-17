@@ -9,6 +9,8 @@ ipcRenderer.on("asynchronous-reply", (event, arg) => {
 });
 ipcRenderer.send("asynchronous-message", { msg: "init" });
 const setOptions = (opt) => {
+  document.getElementById("create_terminal_slct").value = opt.term;
+
   document.getElementById("cols_int").value = opt.cols;
   document.getElementById("rows_int").value = opt.rows;
   document.getElementById("fontsize_int").value = opt.fontSize;
@@ -26,6 +28,8 @@ const setOptions = (opt) => {
   theme = opt.theme;
 };
 const addEvents = () => {
+  document.getElementById("create_terminal_slct").addEventListener("change", getOptions);
+
   document.getElementById("cols_int").addEventListener("change", getOptions);
   document.getElementById("rows_int").addEventListener("change", getOptions);
   document.getElementById("fontsize_int").addEventListener("change", getOptions);
@@ -40,7 +44,11 @@ const addEvents = () => {
   });
 };
 const getOptions = (e) => {
+
+
+  console.log(document.getElementById("create_terminal_slct").value);
   let opt = {
+    term: document.getElementById("create_terminal_slct").value,
     cols: document.getElementById("cols_int").value,
     rows: document.getElementById("rows_int").value,
     fontSize: document.getElementById("fontsize_int").value,
