@@ -1,6 +1,8 @@
 "use strct";
 let tiemrid = null;
 let rows = 40;
+let termno = 0;
+
 window.addEventListener('DOMContentLoaded', function (e) {
   createElement();
   window.addEventListener("message", function (e) {
@@ -21,7 +23,6 @@ function createElement() {
   createTerm(0, val, rows);
 }
 function createTerm(start, end, rows, tmcont) {
-  console.log(tmcont);
   for (let idx = start; idx < end; idx++) {
     if (idx % 2 === 0 && !tmcont) {
       mcont = document.createElement("div");
@@ -39,33 +40,34 @@ function createTerm(start, end, rows, tmcont) {
       inpt.setAttribute("class", "row_input");
       inpt.value = rows;
       inpt.addEventListener("change", function (e) {
-        changeRow(this, mcont);
+        changeRow(this, this.parentNode.parentNode);
       })
       tmcont = document.createElement("div");
       tmcont.setAttribute("class", "term_container");
       mcont.appendChild(tmcont);
     }
-    let ifrm = createIframe(idx);
+    let ifrm = createIframe();
     tmcont.appendChild(ifrm);
   }
 }
 
-function createIframe(id) {
+function createIframe() {
   let cont = document.createElement("div");
   cont.setAttribute("class", "ifrm_container");
-  cont.setAttribute("id", "ifrmcont" + id);
+  cont.setAttribute("id", "ifrmcont" + termno);
 
   let cont2 = document.createElement("div");
   cont.appendChild(cont2);
-  cont2.setAttribute("id", "ifrmcont2" + id);
+  cont2.setAttribute("id", "ifrmcont2" + termno);
 
   let ifrm = document.createElement("iframe");
   cont2.appendChild(ifrm);
-  ifrm.setAttribute("src", "html/terminal.html?id=" + id);
+  ifrm.setAttribute("src", "html/terminal.html?id=" + termno);
   ifrm.setAttribute("frameBorder", "0");
   ifrm.setAttribute("class", "termifrm");
-  ifrm.setAttribute("id", "ifrm" + id);
+  ifrm.setAttribute("id", "ifrm" + termno);
   dragTerm(cont, cont2, ifrm);
+  termno++
   return cont;
 }
 function changeRow(elm, mcont) {
@@ -120,12 +122,10 @@ function resizeIFrame(iFrame, data) {
   iFrame.style.height = data.height + 18 + "px";
 }
 function clickAddButton(e) {
-  let ifrms = document.querySelectorAll(".termifrm");
-  let ifrmlen = ifrms.length;
-  if (ifrmlen % 2 === 0) {
-    createTerm(ifrmlen, ifrmlen + 1, rows);
+  if (termno % 2 === 0) {
+    createTerm(termno, termno + 1, rows);
   } else {
     let mcont = document.querySelectorAll(".term_container");
-    createTerm(ifrmlen, ifrmlen + 1, rows, mcont[mcont.length - 1]);
+    createTerm(termno, termno + 1, rows, mcont[mcont.length - 1]);
   }
 }

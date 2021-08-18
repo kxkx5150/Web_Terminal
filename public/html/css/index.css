@@ -9,9 +9,11 @@ body{
   margin-top: 12px;
   margin-left: 12px;
   /* margin-bottom: 500px; */
+  margin-right: 120x;
   color: #aaa;
   font-size: 13px;
   font-family: arial, sans-serif;
+  width: 200%;
 }
 iframe{
   display: inline-block;
@@ -44,8 +46,8 @@ iframe{
 }
 ::-webkit-scrollbar {
   width: 1px;
-  height: 10px;              
+  height: 1px;              
 }
 ::-webkit-scrollbar-thumb {
-  background-color:#333;
+  background-color:transparent;
 }
