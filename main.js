@@ -172,7 +172,7 @@ if (!gotTheLock) {
       }
     });
     mainWindow.setMenu(null);
-    mainWindow.loadFile(path.join(__dirname, "render/index.html"));
+    mainWindow.loadFile(path.join(__dirname, "render/render.html"));
     // mainWindow.webContents.openDevTools();
     mainWindow.on("minimize", function (e) {
       e.preventDefault();
