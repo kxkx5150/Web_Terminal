@@ -13,29 +13,29 @@ let user = "root";
 let tray = null;
 let mainWindow;
 let theme = {
-  "name" : "Campbell",
+  "name": "Campbell",
   "cursorColor": "#FFFFFF",
   "selectionBackground": "#FFFFFF",
 
-  "background" : "#050505",
-  "foreground" : "#CCCCCC",
+  "background": "#050505",
+  "foreground": "#CCCCCC",
 
-  "black" : "#0C0C0C",
-  "blue" : "#0037DA",
-  "cyan" : "#3A96DD",
-  "green" : "#13A10E",
-  "purple" : "#881798",
-  "red" : "#C50F1F",
-  "white" : "#CCCCCC",
-  "yellow" : "#C19C00",
-  "brightBlack" : "#767676",
-  "brightBlue" : "#3B78FF",
-  "brightCyan" : "#61D6D6",
-  "brightGreen" : "#16C60C",
-  "brightPurple" : "#B4009E",
-  "brightRed" : "#E74856",
-  "brightWhite" : "#F2F2F2",
-  "brightYellow" : "#F9F1A5"
+  "black": "#0C0C0C",
+  "blue": "#0037DA",
+  "cyan": "#3A96DD",
+  "green": "#13A10E",
+  "purple": "#881798",
+  "red": "#C50F1F",
+  "white": "#CCCCCC",
+  "yellow": "#C19C00",
+  "brightBlack": "#767676",
+  "brightBlue": "#3B78FF",
+  "brightCyan": "#61D6D6",
+  "brightGreen": "#16C60C",
+  "brightPurple": "#B4009E",
+  "brightRed": "#E74856",
+  "brightWhite": "#F2F2F2",
+  "brightYellow": "#F9F1A5"
 };
 let createterm = 4;
 
@@ -68,12 +68,12 @@ exapp.set("view engine", "pug");
 
 exapp.get("/", (req, res) => {
   let rport = req.get('host').split(":")[1];
-  if(port === rport - 0){
-    res.render(pugpath,{ shell: "cmd-"+createterm+"-"+rows});
-  }else if(port2 === rport - 0){
-    res.render(pugpath,{ shell: "ps-"+createterm+"-"+rows});
-  }else if(port3 === rport - 0){
-    res.render(pugpath,{ shell: "wsl-"+createterm+"-"+rows});
+  if (port === rport - 0) {
+    res.render(pugpath, { shell: "cmd-" + createterm + "-" + rows });
+  } else if (port2 === rport - 0) {
+    res.render(pugpath, { shell: "ps-" + createterm + "-" + rows });
+  } else if (port3 === rport - 0) {
+    res.render(pugpath, { shell: "wsl-" + createterm + "-" + rows });
   }
 });
 app.allowRendererProcessReuse = false;
@@ -85,7 +85,7 @@ const getOptions = () => {
   setOptions(opt, true);
 };
 const setOptions = (opt, nosave) => {
-  createterm = opt.term-0;
+  createterm = opt.term - 0;
   cols = opt.cols - 0;
   rows = opt.rows - 0;
   fontSize = opt.fontSize - 0;
@@ -146,7 +146,7 @@ if (!gotTheLock) {
     ipcMain.on("asynchronous-message", (event, arg) => {
       if (arg.msg === "init") {
         let obj = {
-          term:createterm,
+          term: createterm,
           cols,
           rows,
           fontSize,
@@ -170,10 +170,6 @@ if (!gotTheLock) {
         sendAll(arg.msg);
       } else if (arg.msg === "changesize") {
         sendAll(arg.msg);
-        // sendAll("autofit");
-
-
-        
       }
     });
     mainWindow.setMenu(null);
@@ -209,7 +205,6 @@ const sendAll = (msg) => {
   }
 }
 
-
 io.on("connect", (socket) => {
   setConnect("cmd.exe", socket);
 });
@@ -221,9 +216,6 @@ io3.on("connect", (socket) => {
   sockets[socket.id] = socket;
   socketids.push(socket.id);
 });
-
-
-
 
 const setConnect = (shell, socket, opts) => {
   if (!opts) opts = [];
@@ -253,20 +245,16 @@ const setConnect = (shell, socket, opts) => {
   });
   socket.on("ready", () => {
     if (shell === "cmd.exe") {
-      if(!home)return;
+      if (!home) return;
       term.write("cd " + home + "\r\n");
-    }else if (shell === "powershell.exe") {
-      if(!home2)return;
+    } else if (shell === "powershell.exe") {
+      if (!home2) return;
       term.write("cd " + home2 + "\r\n");
-    }else if (shell === "wsl.exe") {
-      if(!home3)return;
+    } else if (shell === "wsl.exe") {
+      if (!home3) return;
       term.write("cd " + home3 + "\n");
     }
   });
-
-
-
-
   socket.emit("init", {
     cols,
     rows,

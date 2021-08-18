@@ -8,7 +8,7 @@ body{
   background: #050505;
   margin-top: 12px;
   margin-left: 12px;
-  margin-bottom: 500px;
+  /* margin-bottom: 500px; */
   color: #aaa;
   font-size: 13px;
   font-family: arial, sans-serif;
@@ -44,11 +44,7 @@ iframe{
 }
 ::-webkit-scrollbar {
   width: 1px;
-  height: 8px;              
-  /* display: none; */
-}
-::-webkit-scrollbar-track {
-  border-radius: 10px;
+  height: 10px;              
 }
 ::-webkit-scrollbar-thumb {
   background-color:#333;

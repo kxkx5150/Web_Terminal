@@ -44,9 +44,6 @@ const addEvents = () => {
   });
 };
 const getOptions = (e) => {
-
-
-  console.log(document.getElementById("create_terminal_slct").value);
   let opt = {
     term: document.getElementById("create_terminal_slct").value,
     cols: document.getElementById("cols_int").value,

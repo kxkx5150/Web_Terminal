@@ -8,13 +8,16 @@ html,body{
   display: inline-block;
   padding: 4px;
 }
-
-::-webkit-scrollbar {
-  width: 10px;
+.xterm .xterm-viewport::-webkit-scrollbar {
+  width: 1px;
+  height: 1px;              
 }
-::-webkit-scrollbar-track {
-  border-radius: 10px;
+.xterm .xterm-viewport::-webkit-scrollbar-thumb {
+  background-color:transparent;
+}
+::-webkit-scrollbar {
+  width: 1px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color:#444;
+  background-color:transparent;
 }
