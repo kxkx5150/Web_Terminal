@@ -4,8 +4,8 @@
   let term = null;
   let termsize = {};
   let timerid = null;
-  let resizeflg = false;
-  let rtimerid = null;
+  let resizerflg = false;
+  let rowflg = false;
   let termid = location.search.split("?id=")[1];
   const fitAddon = new FitAddon();
   const socket = io();
@@ -13,7 +13,6 @@
   document.body.addEventListener('ready', function (e) {
     console.log("--- terminal " + termid + " ---");
     console.log("ready");
-    resizeflg = true;
     autoFit();
     socket.emit("ready");
   }, false);
@@ -21,8 +20,8 @@
   window.addEventListener('message', function (e) {
     let data = e.data;
     if (data.msg === "resize") {
-      clearTimeout(rtimerid);
-      rtimerid = setTimeout(() => {
+      clearTimeout(timerid);
+      timerid = setTimeout(() => {
         let w = e.data.width;
         let h = e.data.height;
         document.getElementById("terminal").style.width = w + "px";
@@ -30,9 +29,10 @@
         // this.document.getElementById("terminal").style.height = h + "px";
       }, 200)
     } else if (data.msg === "rows") {
-      termsize.rows = data.rows;
-      resizeTerm(termsize.cols, data.rows)
-      // fitAddon.fit();
+      rowflg = true;
+      termsize.rows = data.rows - 0;
+      resizeTerm(termsize.cols, termsize.rows)
+      autoFit();
     }
   });
 
@@ -62,17 +62,15 @@
 
     term.onResize(size => {
       termsize = size;
-      resizeflg = true;
       socket.emit("resize", size);
+      resizerflg = true;
     });
     term.onRender((d) => {
-      if (resizeflg) {
-        clearTimeout(timerid);
-        timerid = setTimeout(() => {
-          resizeflg = false;
-          resizeMsg();
-        }, 300)
+      if (resizerflg) {
+        resizerflg = false;
+        resizeMsg();
       }
+
       if (ready) return;
       ready = true;
       document.body.dispatchEvent(new Event('ready'));
@@ -92,12 +90,12 @@
     term.resize(size.cols, size.rows);
   };
   const resizeMsg = () => {
-    let term = document.getElementById("terminal");
+    let term = document.querySelector("#terminal");
     let msg = {
       id: termid,
       msg: "resize",
-      width: term.scrollWidth,
-      height: term.scrollHeight
+      width: term.clientWidth,
+      height: term.clientHeight
     }
     parent.postMessage(msg, "*");
   }

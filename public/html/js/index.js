@@ -1,10 +1,10 @@
 "use strct";
+let tiemrid = null;
 window.addEventListener('DOMContentLoaded', function (e) {
   createElement();
   window.addEventListener("message", function (e) {
     let data = e.data;
     if (data.msg === "resize") {
-      console.log("resize: id " + data.id);
       let ifrm = document.getElementById("ifrm" + data.id);
       resizeIFrame(ifrm, data);
     }
@@ -16,7 +16,6 @@ function createElement() {
   let val = ttls[1] - 0;
   let rows = ttls[2] - 0;
   let tmcont = null;
-  let tiemrid = null;
 
   for (let idx = 0; idx < val; idx++) {
     if (idx % 2 === 0) {
@@ -34,20 +33,8 @@ function createElement() {
       inpt.setAttribute("class", "row_input");
       inpt.value = rows;
       inpt.addEventListener("change", function (e) {
-        clearTimeout(tiemrid);
-        tiemrid = setTimeout(() => {
-          let rows = this.value;
-          let ifrms = mcont.querySelectorAll("iframe");
-          ifrms.forEach(ifrm => {
-            let msg = {
-              msg: "rows",
-              rows: rows
-            };
-            ifrm.contentWindow.postMessage(msg, '*');
-          });
-        }, 600)
+        changeRow(this,mcont);
       })
-
       tmcont = document.createElement("div");
       tmcont.setAttribute("class", "term_container");
       mcont.appendChild(tmcont);
@@ -73,16 +60,32 @@ function createIframe(id) {
   dragTerm(cont, cont2, ifrm);
   return cont;
 }
+function changeRow(elm, mcont){
+  clearTimeout(tiemrid);
+  tiemrid = setTimeout(() => {
+    let rows = elm.value;
+    let ifrms = mcont.querySelectorAll("iframe");
+    ifrms.forEach(ifrm => {
+      let msg = {
+        msg: "rows",
+        rows: rows
+      };
+      ifrm.contentWindow.postMessage(msg, '*');
+    });
+  }, 600)
+}
 function dragTerm(cont, cont2, ifrm) {
   $(cont).resizable({
     handles: 'e',
     start: function (event, ui) {
       let h = cont.clientHeight;
-      // let w =  cont.clientWidth;
+      let w =  cont.clientWidth;
       cont.style.height = h + "px";
-      // cont.style.width = w + "px";
-      cont2.style.display = "none";
-      cont.style.border = "2px solid greenyellow";
+      cont.style.width = w + "px";
+      setTimeout(()=>{
+        cont2.style.display = "none";
+        cont.style.border = "2px solid greenyellow";
+      },0)
     },
     stop: function (event, ui) {
       var w = $(cont).outerWidth(true) - 20;

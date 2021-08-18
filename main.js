@@ -55,7 +55,6 @@ const pty = require("node-pty");
 const { app, Menu, Tray, BrowserWindow, ipcMain } = require("electron");
 const Store = require("electron-store");
 const store = new Store();
-
 const sockets = {};
 const socketids = [];
 const pubpath = path.join(__dirname, "public");
