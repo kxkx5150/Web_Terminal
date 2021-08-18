@@ -8,7 +8,7 @@
  bash.exe (WSL2)  
  
 <br><br><br>
-![キャプチャ](https://user-images.githubusercontent.com/10168979/129659651-e411b507-cf46-463f-b855-64c0636e4552.PNG)
+![キャプチャ](https://user-images.githubusercontent.com/10168979/129869768-f3e2a55e-e9e9-49f3-abb3-fcb1b2b2eab7.PNG)
 ![aaa](https://user-images.githubusercontent.com/10168979/129659652-c593d012-4e81-4507-9af0-e6eda4308874.PNG)
 ![スクリーンショット (1)](https://user-images.githubusercontent.com/10168979/129659653-02c8281c-2286-467e-a7dd-5fc8ebb0ab7d.png)
 
